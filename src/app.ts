@@ -1,1 +1,0 @@
-alert("hellk world")

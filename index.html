@@ -1,2 +1,62 @@
-hello world
-<script src="dist/app.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to Excel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+    #output {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Convert Image to Excel</h1>
+
+  <input type="file" id="file-input"/>
+  <button id="convert-btn">Convert to Excel</button>
+
+  <div id="output"></div>
+  <script 
+  src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
+  crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+document.getElementById('file-input')
+  .addEventListener('change', handleFileSelect);
+
+const outputDiv = document.getElementById('output');
+
+async function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  outputDiv.innerHTML = "Processing...";
+
+  try {
+    const worker = await Tesseract.createWorker("eng");
+    
+    const { data: { text } } = await worker.recognize(file);
+
+    outputDiv.innerHTML = `<pre>${text}</pre>`;
+
+    await worker.terminate();
+  } catch (err) {
+    console.error(err);
+    outputDiv.innerHTML = "Error: " + err;
+  }
+}
+</script>
+</script>
+
+</body>
+</html>
