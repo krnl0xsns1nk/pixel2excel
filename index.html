@@ -22,7 +22,7 @@
   <h1>Convert Image to Excel</h1>
 
   <input type="file" id="file-input"/>
-  <button id="convert-btn">Convert to Excel</button>
+  <button id="convert-btn" onclick="con()">Convert</button>
 
   <div id="output"></div>
   <script 
@@ -31,6 +31,7 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    async function con(){
 document.getElementById('file-input')
   .addEventListener('change', handleFileSelect);
 
@@ -54,6 +55,7 @@ async function handleFileSelect(event) {
     console.error(err);
     outputDiv.innerHTML = "Error: " + err;
   }
+}
 }
 </script>
 </script>
