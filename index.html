@@ -4,25 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image to Excel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    input[type="file"] {
-      margin-bottom: 10px;
-    }
-    #output {
-      margin-top: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="./main.css"/>
 </head>
 <body>
 
   <h1>Convert Image to Excel</h1>
 
   <input type="file" id="file-input"/>
-  <button id="convert-btn" onclick="con()">Convert</button>
+  <button id="cnvBtn">Convert</button>
 
   <div id="output"></div>
   <script 
@@ -30,35 +19,6 @@
   crossorigin="anonymous">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-<script>
-    async function con(){
-document.getElementById('file-input')
-  .addEventListener('change', handleFileSelect);
-
-const outputDiv = document.getElementById('output');
-
-async function handleFileSelect(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  outputDiv.innerHTML = "Processing...";
-
-  try {
-    const worker = await Tesseract.createWorker("eng");
-    
-    const { data: { text } } = await worker.recognize(file);
-
-    outputDiv.innerHTML = `<pre>${text}</pre>`;
-
-    await worker.terminate();
-  } catch (err) {
-    console.error(err);
-    outputDiv.innerHTML = "Error: " + err;
-  }
-}
-}
-</script>
-</script>
-
+<script type="module" src="./app.js"></script>
 </body>
 </html>
