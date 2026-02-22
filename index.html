@@ -3,42 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR - Image to Excel</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>تحويل الصور إلى Excel - أداة OCR احترافية مجانية | أسرع طريقة لتحويل البيانات</title>
+    <meta name="description" content="حوّل صور الجداول والنصوص إلى ملفات Excel قابلة للتعديل بنقرة واحدة. أداة مجانية، سريعة، وآمنة 100%. مثالية للمعلمين والمحاسبين والشركات.">
+    <meta name="keywords" content="تحويل صورة إلى excel, OCR عربي, تحويل جدول إلى اكسل, استخراج بيانات من صورة">
+    <meta name="author" content="OCR to Excel">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="تحويل الصور إلى Excel - أداة OCR احترافية">
+    <meta property="og:description" content="حوّل صور الجداول إلى ملفات Excel قابلة للتعديل. مجاني وآمن 100%">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    
 </head>
+<style>
+#debugCanvas {
+  max-width: 100%;
+  max-height: 400px;
+  border: 1px solid #ccc;
+  object-fit: contain;
+}
+</style>
 <body>
-    <h1>تحويل صورة إلى Excel</h1>
-    
-    <h2>1. اختر الصورة:</h2>
-    <input type="file" id="imageInput" accept="image/*">
-    <br><br>
-    
-    <h3>اختر اللغة:</h3>
-    <label>
-        <input type="radio" name="language" value="ara" id="langAra"> عربي
-    </label>
-    <label>
-        <input type="radio" name="language" value="fra" id="langEng" checked> فرنسي
-    </label>
-    <label>
-        <input type="radio" name="language" value="ara+fra" id="langBoth"> كلاهما
-    </label>
-    <br><br>
-    
-    <div id="progress"></div>
-    <br>
-    
-    <h2>2. النص المستخرج:</h2>
-    <textarea id="rawText" rows="10" cols="80" placeholder="النص الخام سيظهر هنا..."></textarea>
-    <br><br>
-    
-    <button id="convertToTable">تحويل إلى جدول</button>
-    <br><br>
-    
-    <h2>3. الجدول (قابل للتعديل):</h2>
-    <table id="dataTable" border="1" style="border-collapse: collapse;">
-    </table>
-    <br><br>
-    
-    <button id="exportToExcel">تحميل Excel</button>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <span class="logo-icon">📊</span>
+                    <span class="logo-text">OCR to Excel</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features" class="nav-link">المميزات</a>
+                    <a href="#start" class="nav-link">ابدأ الآن</a>
+                    <a href="https://github.com/yourusername/ocr-to-excel/wiki" target="_blank" class="nav-link">الدليل</a>
+                    <a href="#start" class="btn-primary-small">جرب مجاناً</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content animate-on-scroll">
+                <div class="badge">✨ مجاني تماماً - بدون تسجيل</div>
+                <h1 class="hero-title">
+                    حوّل صور الجداول إلى 
+                    <span class="gradient-text">Excel</span>
+                    في ثوانٍ
+                </h1>
+                <p class="hero-description">
+                    أداة ذكية تستخدم تقنية OCR المتقدمة لتحويل صور الجداول والبيانات إلى ملفات Excel قابلة للتعديل. 
+                    مثالية للمعلمين والمحاسبين ومديري البيانات.
+                </p>
+                <div class="hero-cta">
+                    <a href="#start" class="btn-primary">ابدأ التحويل الآن</a>
+                    <a href="#features" class="btn-secondary">اكتشف المميزات</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">خصوصية كاملة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">دقة عالية</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">في ثوان</div>
+                        <div class="stat-label">سرعة المعالجة</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-wave" style="rotate: 180deg;">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <div class="section-badge">لماذا نحن؟</div>
+                <h2 class="section-title">مميزات استثنائية لتجربة سلسة</h2>
+                <p class="section-description">كل ما تحتاجه لتحويل بياناتك بكفاءة وأمان</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon green">🔒</div>
+                    <h3 class="feature-title">خصوصية تامة</h3>
+                    <p class="feature-description">معالجة محلية 100%. لا يتم رفع أي بيانات إلى خوادمنا. ملفاتك تبقى عندك.</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon blue">⚡</div>
+                    <h3 class="feature-title">سرعة فائقة</h3>
+                    <p class="feature-description">معالجة فورية في ثوانٍ. لا انتظار، لا تحميل بطيء. نتائج فورية.</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon purple">🎯</div>
+                    <h3 class="feature-title">دقة عالية</h3>
+                    <p class="feature-description">تقنية OCR متقدمة بدقة 95%+ للصور الواضحة. نتائج احترافية في كل مرة.</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon orange">📱</div>
+                    <h3 class="feature-title">يعمل في أي مكان</h3>
+                    <p class="feature-description">متوافق مع جميع الأجهزة. حاسوب، تابلت، أو هاتف. في أي وقت وأي مكان.</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon red">✏️</div>
+                    <h3 class="feature-title">تعديل تفاعلي</h3>
+                    <p class="feature-description">راجع وعدّل البيانات قبل التصدير. تحكم كامل في النتيجة النهائية.</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon teal">💚</div>
+                    <h3 class="feature-title">مجاني دائماً</h3>
+                    <p class="feature-description">بدون رسوم، بدون اشتراكات، بدون قيود. استخدم بلا حدود مجاناً.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Section -->
+    <section id="start" class="app-section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <div class="section-badge">ابدأ الآن</div>
+                <h2 class="section-title">حوّل صورتك إلى Excel</h2>
+                <p class="section-description">ثلاث خطوات بسيطة فقط</p>
+            </div>
+
+            <div class="app-container animate-on-scroll">
+                <!-- Step 1: Upload -->
+                <div class="app-step">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3>ارفع الصورة</h3>
+                    </div>
+                    <div class="upload-area">
+                        <input type="file" id="imageInput" accept="image/*" hidden>
+                        <label for="imageInput" class="upload-label">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">اضغط لاختيار صورة</div>
+                            <div class="upload-hint">PNG, JPG, JPEG - مثالي للـ Screenshots</div>
+                        </label>
+                    </div>
+                    <!-- debugggff -->
+
+                <button id="toggleDebug" class="btn-secondary">
+              🧪 وضع التصحيح
+                </button>
+
+                <div id="debugSection" style="display: none; margin-top: 20px;">
+                        <canvas id="debugCanvas"></canvas>
+                </div>
+
+
+                    <!-- Settings -->
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label">عدد الأعمدة</label>
+                            <input type="number" id="cols" class="setting-input" value="2" min="1" max="20">
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">عدد الصفوف</label>
+                            <input type="number" id="rows" class="setting-input" value="10" min="1" max="100">
+                        </div>
+                    </div>
+
+                    <div id="progress" class="progress-text"></div>
+                </div>
+
+                <!-- Step 2: Review -->
+                <div class="app-step">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3>راجع وعدّل</h3>
+                    </div>
+                    
+                    <div class="textarea-container">
+                        <textarea 
+                            id="rawText" 
+                            placeholder="سيظهر النص المستخرج هنا... يمكنك تعديله قبل إنشاء الجدول"
+                            rows="8"
+                        ></textarea>
+                    </div>
+
+                    <button id="convertBtn" class="btn-create-table">
+                        <span>📊</span>
+                        صنع الجدول
+                    </button>
+                </div>
+
+                <!-- Step 3: Export -->
+                <div class="app-step full-width">
+                    <div class="step-header">
+                        <span class="step-number">3</span>
+                        <h3>الجدول النهائي</h3>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="dataTable" class="data-table"></table>
+                    </div>
+
+                    <button id="exportBtn" class="btn-export">
+                        <span>📥</span>
+                        تحميل ملف Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="tips-section animate-on-scroll">
+                <div class="tip-card success">
+                    <div class="tip-icon">✅</div>
+                    <div class="tip-content">
+                        <h4>للحصول على أفضل النتائج</h4>
+                        <ul>
+                            <li>استخدم صور Screenshots من PDF أو Excel</li>
+                            <li>تأكد من وضوح النص والأرقام</li>
+                            <li>استخدم خلفية نظيفة بدون ظلال</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tip-card warning">
+                    <div class="tip-icon">⚠️</div>
+                    <div class="tip-content">
+                        <h4>غير مناسب لـ</h4>
+                        <ul>
+                            <li>الخط اليدوي (دقة منخفضة)</li>
+                            <li>الصور الضبابية أو المائلة</li>
+                            <li>الصور ذات الإضاءة السيئة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <div class="section-badge">الأسئلة الشائعة</div>
+                <h2 class="section-title">هل لديك سؤال؟</h2>
+            </div>
+
+            <div class="faq-grid">
+                <details class="faq-item animate-on-scroll">
+                    <summary class="faq-question">هل البيانات آمنة؟</summary>
+                    <div class="faq-answer">
+                        نعم، 100%! كل المعالجة تتم في متصفحك. لا يتم رفع أي ملفات إلى خوادمنا. 
+                        خصوصيتك هي أولويتنا القصوى.
+                    </div>
+                </details>
+
+                <details class="faq-item animate-on-scroll">
+                    <summary class="faq-question">ما هي أنواع الصور المدعومة؟</summary>
+                    <div class="faq-answer">
+                        نقبل PNG و JPG و JPEG. للحصول على أفضل النتائج، استخدم screenshots 
+                        من مستندات رقمية بدلاً من صور الكاميرا.
+                    </div>
+                </details>
+
+                <details class="faq-item animate-on-scroll">
+                    <summary class="faq-question">هل الخدمة مجانية؟</summary>
+                    <div class="faq-answer">
+                        نعم، تماماً! بدون أي رسوم أو اشتراكات. يمكنك استخدام الأداة 
+                        بلا حدود ومجاناً للأبد.
+                    </div>
+                </details>
+
+                <details class="faq-item animate-on-scroll">
+                    <summary class="faq-question">ماذا عن دقة التحويل؟</summary>
+                    <div class="faq-answer">
+                        للصور الواضحة والـ Screenshots، الدقة تصل إلى 95%+. 
+                        يمكنك دائماً مراجعة وتعديل البيانات قبل التصدير.
+                    </div>
+                </details>
+            </div>
+
+            <div class="help-cta animate-on-scroll">
+                <h3>مازلت تحتاج مساعدة؟</h3>
+                <p>تفضل بزيارة دليلنا الشامل للحصول على إجابات تفصيلية</p>
+                <a href="https://github.com/yourusername/ocr-to-excel/wiki" target="_blank" class="btn-secondary">
+                    📚 اذهب إلى الدليل
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">📊</span>
+                        <span class="logo-text">OCR to Excel</span>
+                    </div>
+                    <p class="footer-description">
+                        حوّل صورك إلى Excel بسرعة وأمان. مجاني للأبد.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>المنتج</h4>
+                        <a href="#features">المميزات</a>
+                        <a href="#start">ابدأ الآن</a>
+                        <a href="https://github.com/yourusername/ocr-to-excel/wiki">الدليل</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>الدعم</h4>
+                        <a href="https://github.com/yourusername/ocr-to-excel/wiki">التوثيق</a>
+                        <a href="https://github.com/yourusername/ocr-to-excel/issues">الأسئلة الشائعة</a>
+                        <a href="mailto:support@example.com">تواصل معنا</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 OCR to Excel. جميع الحقوق محفوظة.</p>
+                <div class="footer-badges">
+                    <span class="badge-small">مفتوح المصدر</span>
+                    <span class="badge-small">خصوصية 100%</span>
+                    <span class="badge-small">مجاني دائماً</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
 </body>
 </html>

@@ -1,115 +1,90 @@
-import Tesseract from 'tesseract.js';
-import * as XLSX from 'xlsx';
-import { preprocessImage } from './imgPreproces'
-const imageInput = document.getElementById('imageInput') as HTMLInputElement;
-const progressDiv = document.getElementById('progress') as HTMLDivElement;
-const rawTextarea = document.getElementById('rawText') as HTMLTextAreaElement;
-const convertBtn = document.getElementById('convertToTable') as HTMLButtonElement;
-const dataTable = document.getElementById('dataTable') as HTMLTableElement;
-const exportBtn = document.getElementById('exportToExcel') as HTMLButtonElement;
+// src/main.ts
+import "../styles/styles.css";
 
-// Step 1: OCR
-imageInput.addEventListener('change', async (event) => {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  
-  if (!file) {
-    return;
-  }
+import {
+  loadImageToCanvas,
+  preprocessFullImage,
+  drawDebugGrid
+} from "./imageProcessor";
 
-  // الحصول على اللغة المختارة
-  const selectedLang = (document.querySelector('input[name="language"]:checked') as HTMLInputElement)?.value || 'fra';
+import { renderTable } from "./tableRenderer";
+import { exportTableToExcel } from "./excelExporter";
 
-  progressDiv.textContent = 'جاري المعالجة...';
-  rawTextarea.value = '';
-  dataTable.innerHTML = '';
-  const processedImage = await preprocessImage(file)
-  try {
-    const result = await Tesseract.recognize(
-      processedImage,
-      selectedLang, // استخدام اللغة المختارة
-      {
-        workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
-        langPath: 'https://tessdata.projectnaptha.com/4.0.0',
-        logger: (m) => {
-          if (m.status === 'recognizing text') {
-            const progress = Math.round(m.progress * 100);
-            progressDiv.textContent = `جاري التعرف على النص: ${progress}%`;
-          }
-        }
-      }
-    );
+import { recognizeWithGemini, testGemini } from "./geminiVision"; // تعديل هنا
+import { canvasToBase64 } from "./utils";
 
-    rawTextarea.value = result.data.text;
-    progressDiv.textContent = 'تم الانتهاء! الآن عدّل النص ثم اضغط "تحويل إلى جدول"';
-    
-  } catch (error) {
-    progressDiv.textContent = 'حدث خطأ: ' + (error as Error).message;
-    console.error(error);
-  }
+const imageInput = document.getElementById("imageInput") as HTMLInputElement;
+const rowsInput = document.getElementById("rows") as HTMLInputElement;
+const colsInput = document.getElementById("cols") as HTMLInputElement;
+const progressDiv = document.getElementById("progress") as HTMLDivElement;
+const dataTable = document.getElementById("dataTable") as HTMLTableElement;
+const exportBtn = document.getElementById("exportBtn") as HTMLButtonElement;
+const toggleBtn = document.getElementById("toggleDebug") as HTMLButtonElement;
+const debugSection = document.getElementById("debugSection") as HTMLDivElement;
+
+let debugEnabled = false;
+
+// Toggle Debug
+toggleBtn.addEventListener("click", () => {
+  debugEnabled = !debugEnabled;
+
+  debugSection.style.display = debugEnabled ? "block" : "none";
+  toggleBtn.textContent = debugEnabled
+    ? "Close Debug"
+    : "Enable Debug";
 });
 
-// Step 2: Convert text to HTML table
-convertBtn.addEventListener('click', () => {
-  const text = rawTextarea.value.trim();
-  
-  if (!text) {
-    alert('لا يوجد نص للتحويل!');
+// On image selection
+imageInput.addEventListener("change", async (e) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+
+  const rows = parseInt(rowsInput.value);
+  const cols = parseInt(colsInput.value);
+
+  if (!rows || !cols) {
+    alert("Please specify number of rows and columns");
     return;
   }
 
-  const lines = text.split('\n').filter(line => line.trim() !== '');
-  const data: string[][] = lines.map(line => {
-    return line.trim().split(/\s+/);
-  });
+  progressDiv.textContent = "Loading image...";
 
-  dataTable.innerHTML = '';
-  
-  data.forEach((row, rowIndex) => {
-    const tr = document.createElement('tr');
-    
-    row.forEach((cell) => {
-      const td = document.createElement('td');
-      td.contentEditable = 'true';
-      td.textContent = cell;
-      td.style.padding = '5px';
-      td.style.minWidth = '100px';
-      tr.appendChild(td);
-    });
-    
-    dataTable.appendChild(tr);
-  });
+  // Load image into canvas
+  const originalCanvas = await loadImageToCanvas(file);
 
-  progressDiv.textContent = 'الجدول جاهز! عدّل البيانات ثم اضغط "تحميل Excel"';
+  // Preprocess (grayscale)
+  const processedCanvas = preprocessFullImage(originalCanvas, false);
+
+  // Debug view
+  if (debugEnabled) {
+    debugSection.innerHTML = "";
+    const debugCanvas = drawDebugGrid(processedCanvas, rows, cols);
+    debugSection.appendChild(debugCanvas);
+  }
+
+  progressDiv.textContent = "Sending image to Gemini...";
+
+  // Convert canvas to base64
+  const base64 = canvasToBase64(processedCanvas);
+  const result = await testGemini();
+    alert(result);
+
+  // Call Gemini API
+  const tableData: string[][] = await recognizeWithGemini(base64);
+
+  if (!tableData.length) {
+    progressDiv.textContent = "Failed to extract data";
+    alert(JSON.stringify(tableData));
+    return;
+  }
+
+  // Render table
+  renderTable(dataTable, tableData);
+
+  progressDiv.textContent = "Finished ✔";
 });
 
-// Step 3: Export to Excel
-exportBtn.addEventListener('click', () => {
-  if (dataTable.rows.length === 0) {
-    alert('لا يوجد جدول للتصدير!');
-    return;
-  }
-
-  const data: string[][] = [];
-  
-  for (let i = 0; i < dataTable.rows.length; i++) {
-    const row = dataTable.rows[i];
-    const rowData: string[] = [];
-    
-    for (let j = 0; j < row.cells.length; j++) {
-      const cellText = (row.cells[j].textContent || '').trim();
-      rowData.push(cellText);
-    }
-    
-    if (rowData.some(cell => cell !== '')) {
-      data.push(rowData);
-    }
-  }
-
-  const worksheet = XLSX.utils.aoa_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-  
-  XLSX.writeFileXLSX(workbook, 'outiiiiiii.xlsx');
-  
-  progressDiv.textContent = `تم تحميل الملف! (${data.length} صف)`;
+// Export Excel
+exportBtn.addEventListener("click", () => {
+  exportTableToExcel(dataTable, "grades.xlsx");
 });
