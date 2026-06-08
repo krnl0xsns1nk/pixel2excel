@@ -1,645 +1,239 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- SEO -->
-  <title>TableScan AI – حوّل صور الجداول إلى Excel في ثوانٍ</title>
-  <meta name="description" content="أداة ذكاء اصطناعي احترافية لتحويل صور الجداول والبيانات إلى ملفات Excel قابلة للتعديل. سريعة، دقيقة، وآمنة 100%.">
-  <meta name="keywords" content="تحويل صورة إلى excel, OCR عربي, استخراج جدول من صورة, ذكاء اصطناعي جداول">
-  <meta name="author" content="TableScan AI">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://tablescan.ai/">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="TableScan AI – تحويل الجداول إلى Excel بالذكاء الاصطناعي">
-  <meta property="og:description" content="حوّل أي صورة جدول إلى ملف Excel في ثوانٍ. مجاني، دقيق، وآمن.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="ar_SA">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TableScan AI">
-  <meta name="twitter:description" content="تحويل صور الجداول إلى Excel بالذكاء الاصطناعي">
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "TableScan AI",
-    "description": "أداة تحويل صور الجداول إلى ملفات Excel باستخدام الذكاء الاصطناعي",
-    "applicationCategory": "BusinessApplication",
-    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
-  }
-  </script>
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300ff88'/><text y='72' x='50' text-anchor='middle' font-size='60' font-family='Arial'>⚡</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Only load needed weights, add display=swap -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Preload critical CSS -->
-  <link rel="preload" href="style.css" as="style">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel2Excel — Grade Table Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- Animated Background -->
-<div class="bg-scene" aria-hidden="true">
-  <canvas id="particleCanvas"></canvas>
-  <div class="grid-overlay"></div>
-  <div class="glow-orb orb-1"></div>
-  <div class="glow-orb orb-2"></div>
-  <div class="glow-orb orb-3"></div>
-</div>
+  <div class="app-shell">
 
-<!-- NAVBAR -->
-<header class="navbar" id="navbar" role="banner">
-  <div class="nav-inner">
-    <a href="#" class="logo" aria-label="TableScan AI - الصفحة الرئيسية">
-      <div class="logo-icon">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="3" y="3" width="34" height="34" rx="8" stroke="url(#lg1)" stroke-width="2"/>
-          <line x1="3" y1="14" x2="37" y2="14" stroke="url(#lg1)" stroke-width="1.5"/>
-          <line x1="3" y1="25" x2="37" y2="25" stroke="url(#lg1)" stroke-width="1.5"/>
-          <line x1="15" y1="3" x2="15" y2="37" stroke="url(#lg1)" stroke-width="1.5"/>
-          <line x1="27" y1="3" x2="27" y2="37" stroke="url(#lg1)" stroke-width="1.5"/>
-          <circle cx="20" cy="20" r="4" fill="url(#lg1)" class="logo-pulse"/>
-          <defs>
-            <linearGradient id="lg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#00ff88"/>
-              <stop offset="1" stop-color="#00d4ff"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-      <span class="logo-text">TableScan<span class="logo-ai">AI</span></span>
-    </a>
+    <!-- Sidebar -->
+    <aside class="sidebar" role="complementary" aria-label="Controls">
 
-    <nav class="nav-links" role="navigation" aria-label="القائمة الرئيسية">
-      <a href="#features" class="nav-link">المميزات</a>
-      <a href="#how-it-works" class="nav-link">كيف يعمل</a>
-      <a href="#faq" class="nav-link">الأسئلة الشائعة</a>
-    </nav>
-
-    <a href="#app" class="nav-cta">
-      <span>ابدأ مجاناً</span>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-
-    <button class="hamburger" id="hamburger" aria-label="فتح القائمة" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
-
-<!-- HERO -->
-<section class="hero" id="hero" aria-label="القسم الرئيسي">
-  <div class="container">
-    <div class="hero-badge">
-      <div class="badge-dot"></div>
-      <span>مدعوم بالذكاء الاصطناعي • مجاني تماماً</span>
-    </div>
-
-    <h1 class="hero-title">
-      حوّل <span class="highlight">الجداول</span><br>
-      إلى <span class="highlight-alt">Excel</span><br>
-      <span class="hero-sub">في ثوانٍ معدودة</span>
-    </h1>
-
-    <p class="hero-desc">
-      أداة ذكية تقرأ أي صورة جدول وتحوّلها إلى ملف Excel قابل للتعديل.
-      تعمل مع الخط المطبوع والخط اليدوي. دقة تصل إلى 98%.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#app" class="btn-primary hero-btn">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M10 2L10 14M10 14L6 10M10 14L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="3" y="15" width="14" height="3" rx="1.5" fill="currentColor"/>
-        </svg>
-        ارفع صورة الآن
-      </a>
-      <a href="#how-it-works" class="btn-ghost">
-        شاهد كيف يعمل
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M6.5 6C6.5 5.17 7.17 4.5 8 4.5s1.5.67 1.5 1.5c0 1-1.5 1.5-1.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="8" cy="11.5" r=".75" fill="currentColor"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="hero-stats" role="list" aria-label="إحصائيات">
-      <div class="stat-item" role="listitem">
-        <div class="stat-val" data-count="98">0</div>
-        <div class="stat-pct">%</div>
-        <div class="stat-lbl">دقة القراءة</div>
-      </div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      <div class="stat-item" role="listitem">
-        <div class="stat-val" data-count="5">0</div>
-        <div class="stat-pct">s</div>
-        <div class="stat-lbl">وقت المعالجة</div>
-      </div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      <div class="stat-item" role="listitem">
-        <div class="stat-val" data-count="100">0</div>
-        <div class="stat-pct">%</div>
-        <div class="stat-lbl">خصوصية آمنة</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating table preview -->
-  <div class="hero-visual" aria-hidden="true">
-    <div class="floating-card">
-      <div class="card-header">
-        <div class="card-dots">
-          <span></span><span></span><span></span>
+      <header class="sidebar__header">
+        <div class="logo">
+          <span class="logo__icon" aria-hidden="true">⌗</span>
+          <div class="logo__text">
+            <span class="logo__product">Pixel2Excel</span>
+            <span class="logo__tagline">Grade Table Converter</span>
+          </div>
         </div>
-        <span class="card-title">table_data.xlsx</span>
-      </div>
-      <div class="mock-table">
-        <div class="mock-row header-row">
-          <span>الاسم</span><span>الدرجة</span><span>التقدير</span>
-        </div>
-        <div class="mock-row" style="--d:0.1s"><span>أحمد محمد</span><span class="score">95</span><span class="grade a">A+</span></div>
-        <div class="mock-row" style="--d:0.2s"><span>سارة علي</span><span class="score">87</span><span class="grade b">B+</span></div>
-        <div class="mock-row" style="--d:0.3s"><span>خالد إبراهيم</span><span class="score">91</span><span class="grade a">A</span></div>
-        <div class="mock-row" style="--d:0.4s"><span>نورة فهد</span><span class="score">78</span><span class="grade b">B</span></div>
-      </div>
-      <div class="scan-line"></div>
-    </div>
-  </div>
+        <div class="version-badge">v0.1</div>
+      </header>
 
-  <div class="hero-scroll-hint" aria-hidden="true">
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
+      <section class="sidebar__section" aria-labelledby="upload-heading">
+        <h2 class="sidebar__section-label" id="upload-heading">Input Image</h2>
 
-<!-- FEATURES -->
-<section id="features" class="features-section" aria-label="المميزات">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-badge">لماذا TableScan؟</div>
-      <h2 class="section-title">مميزات تجعلنا <span class="highlight">مختلفين</span></h2>
-      <p class="section-desc">أداة بُنيت من الصفر لتحويل جداول البيانات بدقة استثنائية</p>
-    </div>
-
-    <div class="features-grid">
-
-      <article class="feat-card" data-delay="0">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="24" cy="24" r="20" stroke="url(#fi1)" stroke-width="1.5" stroke-dasharray="4 2" class="spin-slow"/>
-            <path d="M16 24c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8" stroke="url(#fi1)" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="24" cy="24" r="3" fill="url(#fi1)"/>
-            <path d="M24 12V8M24 40v-4M12 24H8M40 24h-4" stroke="url(#fi1)" stroke-width="2" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="fi1" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>ذكاء اصطناعي متقدم</h3>
-        <p>نموذج AI قوي يفهم بنية الجداول ويستخرج البيانات بدقة استثنائية، حتى من الصور المعقدة.</p>
-      </article>
-
-      <article class="feat-card" data-delay="1">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="8" y="8" width="32" height="32" rx="6" stroke="url(#fi2)" stroke-width="1.5"/>
-            <line x1="8" y1="18" x2="40" y2="18" stroke="url(#fi2)" stroke-width="1.5"/>
-            <line x1="8" y1="28" x2="40" y2="28" stroke="url(#fi2)" stroke-width="1.5"/>
-            <line x1="20" y1="8" x2="20" y2="40" stroke="url(#fi2)" stroke-width="1.5"/>
-            <rect x="22" y="20" width="16" height="6" rx="2" fill="url(#fi2)" opacity="0.3"/>
-            <defs>
-              <linearGradient id="fi2" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>يفهم بنية الجدول</h3>
-        <p>لا مجرد قراءة نص – يفهم الصفوف والأعمدة والترتيب، ويحافظ على هيكل بياناتك تماماً.</p>
-      </article>
-
-      <article class="feat-card" data-delay="2">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M24 6l3 9h9l-7.5 5.5 3 9L24 24l-7.5 5.5 3-9L12 15h9z" stroke="url(#fi3)" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="24" cy="24" r="18" stroke="url(#fi3)" stroke-width="1" stroke-dasharray="2 4" class="spin-medium"/>
-            <defs>
-              <linearGradient id="fi3" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>خط اليد مدعوم</h3>
-        <p>تقنيتنا تقرأ الأرقام والحروف المكتوبة يدوياً. مثالي لأوراق الامتحانات وسجلات الدرجات.</p>
-      </article>
-
-      <article class="feat-card" data-delay="3">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 28l8-8 8 8 8-12 8 6" stroke="url(#fi4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="8" cy="28" r="3" fill="url(#fi4)"/>
-            <circle cx="16" cy="20" r="3" fill="url(#fi4)"/>
-            <circle cx="24" cy="28" r="3" fill="url(#fi4)"/>
-            <circle cx="32" cy="16" r="3" fill="url(#fi4)"/>
-            <circle cx="40" cy="22" r="3" fill="url(#fi4)"/>
-            <rect x="4" y="38" width="40" height="2" rx="1" fill="url(#fi4)" opacity="0.3"/>
-            <defs>
-              <linearGradient id="fi4" x1="8" y1="16" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>دقة 98%</h3>
-        <p>اختبرنا على آلاف الجداول. للصور الواضحة نحقق دقة استثنائية مع إمكانية مراجعة النتائج.</p>
-      </article>
-
-      <article class="feat-card" data-delay="4">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M24 6v8M24 34v8M6 24h8M34 24h8" stroke="url(#fi5)" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="24" cy="24" r="10" stroke="url(#fi5)" stroke-width="1.5"/>
-            <path d="M20 24l3 3 5-6" stroke="url(#fi5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="fi5" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>معالجة فورية</h3>
-        <p>خوادم قوية تعالج صورتك في ثوانٍ. لا انتظار، لا تأخير، النتيجة في يدك على الفور.</p>
-      </article>
-
-      <article class="feat-card" data-delay="5">
-        <div class="feat-icon">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M24 6L10 14v10c0 8.3 5.9 16.1 14 18 8.1-1.9 14-9.7 14-18V14L24 6z" stroke="url(#fi6)" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M18 24l4 4 8-8" stroke="url(#fi6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="fi6" x1="10" y1="6" x2="38" y2="42" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>خصوصية كاملة</h3>
-        <p>صورك تُعالج وتُحذف فوراً. لا تخزين، لا مشاركة، لا بيانات محفوظة على الإطلاق.</p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="how-it-works" class="steps-section" aria-label="كيف يعمل">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-badge">العملية</div>
-      <h2 class="section-title">ثلاث خطوات <span class="highlight">بسيطة</span></h2>
-    </div>
-
-    <div class="steps-track">
-      <div class="steps-line" aria-hidden="true"></div>
-
-      <div class="step-item">
-        <div class="step-num">01</div>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
-            <circle cx="28" cy="28" r="26" stroke="url(#si1)" stroke-width="1.5"/>
-            <path d="M28 18v12M22 24l6-6 6 6" stroke="url(#si1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="18" y="34" width="20" height="4" rx="2" fill="url(#si1)" opacity="0.4"/>
-            <defs>
-              <linearGradient id="si1" x1="2" y1="2" x2="54" y2="54" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>ارفع الصورة</h3>
-        <p>اسحب صورة جدولك أو انقر لاختيارها. ندعم PNG وJPG بأي حجم.</p>
-      </div>
-
-      <div class="step-item">
-        <div class="step-num">02</div>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
-            <circle cx="28" cy="28" r="26" stroke="url(#si2)" stroke-width="1.5"/>
-            <circle cx="28" cy="28" r="8" stroke="url(#si2)" stroke-width="1.5"/>
-            <path d="M28 6v8M28 42v8M6 28h8M42 28h8M12.4 12.4l5.7 5.7M37.9 37.9l5.7 5.7M12.4 43.6l5.7-5.7M37.9 18.1l5.7-5.7" stroke="url(#si2)" stroke-width="1.5" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="si2" x1="2" y1="2" x2="54" y2="54" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>الذكاء الاصطناعي يعمل</h3>
-        <p>يتم تحليل الصورة واستخراج كل البيانات تلقائياً مع الحفاظ على بنية الجدول.</p>
-      </div>
-
-      <div class="step-item">
-        <div class="step-num">03</div>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
-            <circle cx="28" cy="28" r="26" stroke="url(#si3)" stroke-width="1.5"/>
-            <path d="M20 28l5 5 11-11" stroke="url(#si3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M18 38h20v-2H18v2z" fill="url(#si3)" opacity="0.4"/>
-            <defs>
-              <linearGradient id="si3" x1="2" y1="2" x2="54" y2="54" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h3>حمّل الـ Excel</h3>
-        <p>راجع الجدول الناتج وحمّل ملف Excel جاهز للاستخدام في ثوانٍ.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- APP SECTION -->
-<section id="app" class="app-section" aria-label="تطبيق التحويل">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-badge">ابدأ الآن</div>
-      <h2 class="section-title">حوّل صورتك <span class="highlight">الآن</span></h2>
-    </div>
-
-    <div class="app-card">
-
-      <!-- Upload Zone -->
-      <div class="upload-zone" id="uploadZone" role="region" aria-label="منطقة رفع الصور">
-        <input type="file" id="imageInput" accept="image/*" hidden aria-label="اختر صورة">
-        <label for="imageInput" class="upload-label" id="uploadLabel">
-          <div class="upload-anim">
-            <svg class="upload-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-              <circle cx="60" cy="60" r="55" stroke="url(#ul1)" stroke-width="1" stroke-dasharray="6 4" class="spin-slow"/>
-              <circle cx="60" cy="60" r="40" stroke="url(#ul1)" stroke-width="1.5" stroke-dasharray="3 3" class="spin-reverse"/>
-              <path d="M60 40v24M48 52l12-12 12 12" stroke="url(#ul1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="44" y="70" width="32" height="5" rx="2.5" fill="url(#ul1)" opacity="0.5"/>
-              <defs>
-                <linearGradient id="ul1" x1="5" y1="5" x2="115" y2="115" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-                </linearGradient>
-              </defs>
+        <label
+          class="upload-zone"
+          id="uploadZone"
+          for="fileInput"
+          tabindex="0"
+          aria-label="Upload grade sheet image. Click or drag and drop."
+          aria-describedby="upload-hint"
+        >
+          <div class="upload-zone__icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 16l4-4 4 4 4-8 4 4"/>
+              <rect x="2" y="2" width="20" height="20" rx="2"/>
             </svg>
           </div>
-          <div class="upload-text-block">
-            <span class="upload-main">اسحب الصورة هنا</span>
-            <span class="upload-or">أو</span>
-            <span class="upload-cta">اضغط لاختيار ملف</span>
-            <span class="upload-hint">PNG • JPG • JPEG</span>
-          </div>
+          <p class="upload-zone__primary">Drop image here</p>
+          <p class="upload-zone__secondary" id="upload-hint">PNG, JPG, WEBP — max 10MB</p>
         </label>
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          aria-label="Select image file"
+          class="upload-zone__input"
+        />
 
-        <!-- Preview -->
-        <div class="preview-area" id="previewArea" hidden>
-          <img id="previewImg" src="" alt="معاينة الصورة المرفوعة">
-          <button class="remove-img" id="removeImg" aria-label="إزالة الصورة">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <div class="image-preview-container" id="imagePreviewContainer" aria-live="polite" hidden>
+          <img id="imagePreview" class="image-preview" alt="Uploaded grade sheet preview" />
+          <button class="image-preview__remove" id="removeImageBtn" aria-label="Remove uploaded image" title="Remove image">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </button>
+          <div class="image-preview__meta" id="imageFileMeta"></div>
         </div>
-      </div>
+      </section>
+      <section class="sidebar__section">
+        <p class="sidebar__footer-text">
+	For best results:</br>
+	• Use clear handwriting</br>
+	• Keep grades inside cells</br>
+	• Take a straight photo</br>
+	• Avoid shadows</br>
+	</p>
+      </section>
+      <section class="sidebar__section" aria-labelledby="actions-heading">
+        <h2 class="sidebar__section-label" id="actions-heading">Actions</h2>
 
-      <!-- Action Row -->
-      <div class="action-row">
-        <button class="btn-primary convert-btn" id="convertBtn" disabled>
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 2L12 16M12 16L7 11M12 16L17 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 19h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span class="btn-text">حوّل إلى Excel</span>
-          <div class="btn-loader" hidden>
-            <svg class="spin-fast" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-dasharray="28 56"/>
+        <button class="btn btn--primary" id="generateBtn" disabled aria-describedby="statusText">
+          <span class="btn__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
             </svg>
-          </div>
+          </span>
+          <span class="btn__label">Generate Table</span>
         </button>
 
-        <!-- Advanced Settings Toggle -->
-        <button class="settings-toggle" id="settingsToggle" aria-expanded="false" aria-controls="advancedSettings" title="الإعدادات المتقدمة">
-          <svg viewBox="0 0 22 22" fill="none" aria-hidden="true">
-            <circle cx="11" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M11 2v2M11 18v2M2 11h2M18 11h2M4.9 4.9l1.4 1.4M15.7 15.7l1.4 1.4M4.9 17.1l1.4-1.4M15.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <span>إعدادات متقدمة</span>
-        </button>
-      </div>
+        <div class="divider" role="separator"></div>
 
-      <!-- Advanced Settings Panel -->
-      <div class="advanced-settings" id="advancedSettings" hidden>
-        <div class="adv-grid">
-          <div class="adv-field">
-            <label for="cols" class="adv-label">عدد الأعمدة المتوقعة</label>
-            <input type="number" id="cols" class="adv-input" value="2" min="1" max="20" aria-describedby="cols-hint">
-            <span id="cols-hint" class="adv-hint">اتركه فارغاً للكشف التلقائي</span>
-          </div>
-          <div class="adv-field">
-            <label for="rows" class="adv-label">عدد الصفوف المتوقعة</label>
-            <input type="number" id="rows" class="adv-input" value="10" min="1" max="200" aria-describedby="rows-hint">
-            <span id="rows-hint" class="adv-hint">اتركه فارغاً للكشف التلقائي</span>
+        <div class="export-group">
+          <p class="export-group__label">Export</p>
+          <div class="export-group__buttons">
+            <button class="btn btn--secondary" id="exportCsvBtn" disabled aria-label="Export table as CSV file">
+              <span class="btn__icon" aria-hidden="true">↓</span>
+              <span class="btn__label">CSV</span>
+            </button>
+            <button class="btn btn--secondary" id="exportXlsxBtn" disabled aria-label="Export table as Excel XLSX file">
+              <span class="btn__icon" aria-hidden="true">↓</span>
+              <span class="btn__label">XLSX</span>
+            </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Progress -->
-      <div class="progress-bar-wrap" id="progressWrap" hidden role="progressbar" aria-label="تقدم المعالجة" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar" id="progressBar"></div>
-        <div class="progress-text" id="progressText">جاري المعالجة...</div>
-      </div>
-
-      <!-- Result Table -->
-      <div class="result-area" id="resultArea" hidden>
-        <div class="result-header">
-          <div class="result-title">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M3 5h14M3 10h14M3 15h14" stroke="url(#rh1)" stroke-width="1.5" stroke-linecap="round"/>
-              <defs>
-                <linearGradient id="rh1" x1="3" y1="5" x2="17" y2="15" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            النتيجة – يمكنك تعديل الخلايا مباشرة
-          </div>
+      <section class="sidebar__section sidebar__section--status" aria-labelledby="status-heading">
+        <h2 class="sidebar__section-label" id="status-heading">Status</h2>
+        <div class="status-panel" role="status" aria-live="polite" aria-atomic="true">
+          <div class="status-indicator" id="statusIndicator" data-state="idle"></div>
+          <p class="status-text" id="statusText">Ready. Upload an image to begin.</p>
         </div>
-        <div class="table-scroll">
-          <table id="dataTable" class="data-table" aria-label="جدول البيانات المستخرجة"></table>
-        </div>
-        <button class="btn-export" id="exportBtn">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M10 3v10M10 13L6 9M10 13l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="3" y="15" width="14" height="2.5" rx="1.25" fill="currentColor"/>
-          </svg>
-          تحميل ملف Excel
-        </button>
-      </div>
+      </section>
 
-    </div>
-
-    <!-- Tips -->
-    <div class="tips-row">
-      <div class="tip good">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <circle cx="9" cy="9" r="8" stroke="#00ff88" stroke-width="1.5"/>
-          <path d="M6 9l2.5 2.5L12 6" stroke="#00ff88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div>
-          <strong>للحصول على أفضل نتائج:</strong>
-          صور واضحة، إضاءة جيدة، خلفية نظيفة، screenshots من مستندات رقمية.
-        </div>
-      </div>
-      <div class="tip warn">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <path d="M9 2L2 15h14L9 2z" stroke="#ffaa00" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M9 8v4" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="9" cy="13.5" r=".75" fill="#ffaa00"/>
-        </svg>
-        <div>
-          <strong>قد تنخفض الدقة في:</strong>
-          الصور الضبابية، الإضاءة السيئة، الزوايا المائلة بشدة.
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq" class="faq-section" aria-label="الأسئلة الشائعة">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-badge">الأسئلة الشائعة</div>
-      <h2 class="section-title">هل لديك <span class="highlight">سؤال؟</span></h2>
-    </div>
-
-    <div class="faq-list" role="list">
-      <details class="faq-item" role="listitem">
-        <summary class="faq-q">
-          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          هل البيانات آمنة ومحمية؟
-        </summary>
-        <div class="faq-a">نعم، 100%. صورك تُعالج فوراً وتُحذف تلقائياً بعد الانتهاء. لا نحتفظ بأي ملفات أو بيانات على إطلاقاً. خصوصيتك أولويتنا القصوى.</div>
-      </details>
-
-      <details class="faq-item" role="listitem">
-        <summary class="faq-q">
-          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          ما أنواع الصور المدعومة؟
-        </summary>
-        <div class="faq-a">ندعم PNG وJPG وJPEG. للحصول على أفضل النتائج استخدم screenshots من مستندات رقمية. كذلك ندعم صور الكاميرا لكن مع إضاءة جيدة وزاوية مستقيمة.</div>
-      </details>
-
-      <details class="faq-item" role="listitem">
-        <summary class="faq-q">
-          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          هل الخدمة مجانية للأبد؟
-        </summary>
-        <div class="faq-a">نقدم تحويلات مجانية للتجربة. بعدها تتوفر خطط مرنة بأسعار معقولة تناسب الاستخدام الفردي والمؤسسي.</div>
-      </details>
-
-      <details class="faq-item" role="listitem">
-        <summary class="faq-q">
-          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          ما مدى دقة التحويل؟
-        </summary>
-        <div class="faq-a">للصور الواضحة والـ screenshots تصل الدقة إلى 98%+. ويمكنك دائماً مراجعة وتعديل الخلايا مباشرة في الجدول قبل التصدير.</div>
-      </details>
-
-      <details class="faq-item" role="listitem">
-        <summary class="faq-q">
-          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          هل يعمل مع خط اليد؟
-        </summary>
-        <div class="faq-a">نعم! على عكس أدوات OCR التقليدية، تقنيتنا تقرأ الأرقام والحروف المكتوبة يدوياً. مثالي للمعلمين الذين يحولون أوراق الدرجات.</div>
-      </details>
+      <footer class="sidebar__footer">
+	      <!--        <p class="sidebar__footer-text">For official use only.<br/>Data is not stored or transmitted.</p> -->
+	<div id="privacyBar" style="font-family:'DM Mono',monospace;font-size:11px;color:#6b6560;padding:8px 14px;background:#f8f8f6;border:1px solid #eeecea;border-radius:6px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;">
+  <span style="color:#3d3a36;font-weight:500;">Privacy Policy.</span>
+  <button onclick="(function(){var c=document.getElementById('privacyContent');var t=document.getElementById('privacyToggle');var o=c.style.maxHeight!=='0px'&&c.style.maxHeight!=='';if(o){c.style.maxHeight='0';c.style.opacity='0';t.textContent='Show more';}else{c.style.maxHeight=c.scrollHeight+'px';c.style.opacity='1';t.textContent='Show less';}})()" id="privacyToggle" style="background:none;border:none;font-family:inherit;font-size:inherit;color:#1a6bff;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;">Show more</button>
+  <div id="privacyContent" style="width:100%;max-height:0;overflow:hidden;opacity:0;transition:max-height 300ms ease,opacity 250ms ease;">
+    <div style="padding-top:10px;border-top:1px solid #eeecea;margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+      <p style="margin:0;line-height:1.65;">This service processes uploaded grade table images to generate editable spreadsheets.</p>
+      <p style="margin:0;line-height:1.65;">Images are sent to third-party AI services for analysis and grade extraction. Please upload only the information necessary for this purpose.</p>
+      <p style="margin:0;line-height:1.65;">Uploaded files may be temporarily stored for processing, debugging, and service improvement. Do not upload sensitive personal information unless required.</p>
+      <p style="margin:0;line-height:1.65;">By using this service, you acknowledge that AI-generated results may contain errors and should be reviewed before use.</p>
+      <p style="margin:0;line-height:1.65;">This beta version is under active development, and features and data handling practices may change over time.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
-<footer class="footer" role="contentinfo">
-  <div class="footer-glow" aria-hidden="true"></div>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo">
-          <div class="logo-icon small">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <rect x="3" y="3" width="34" height="34" rx="8" stroke="url(#flo1)" stroke-width="2"/>
-              <line x1="3" y1="14" x2="37" y2="14" stroke="url(#flo1)" stroke-width="1.5"/>
-              <line x1="3" y1="25" x2="37" y2="25" stroke="url(#flo1)" stroke-width="1.5"/>
-              <line x1="15" y1="3" x2="15" y2="37" stroke="url(#flo1)" stroke-width="1.5"/>
-              <line x1="27" y1="3" x2="27" y2="37" stroke="url(#flo1)" stroke-width="1.5"/>
-              <defs>
-                <linearGradient id="flo1" x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#00ff88"/><stop offset="1" stop-color="#00d4ff"/>
-                </linearGradient>
-              </defs>
-            </svg>
+      </footer>
+
+    </aside>
+
+    <!-- Main workspace -->
+    <main class="workspace" role="main" aria-label="Table workspace">
+
+      <header class="workspace__header">
+        <div class="workspace__header-left">
+          <h1 class="workspace__title">Grade Table</h1>
+          <div class="workspace__meta" id="tableMeta" aria-live="polite"></div>
+        </div>
+        <div class="workspace__header-right">
+          <div class="toolbar" role="toolbar" aria-label="Table tools">
+            <button class="toolbar__btn" id="undoBtn" disabled title="Undo (Ctrl+Z)" aria-label="Undo last change">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/>
+              </svg>
+            </button>
+            <button class="toolbar__btn" id="redoBtn" disabled title="Redo (Ctrl+Y)" aria-label="Redo last change">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3L21 13"/>
+              </svg>
+            </button>
+            <div class="toolbar__divider" role="separator"></div>
+            <button class="toolbar__btn" id="addRowBtn" disabled title="Add row" aria-label="Add row to table">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="1"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+              </svg>
+            </button>
+            <button class="toolbar__btn" id="addColBtn" disabled title="Add column" aria-label="Add column to table">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="1"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+                <line x1="19" y1="3" x2="19" y2="21"/>
+              </svg>
+            </button>
           </div>
-          <span class="logo-text">TableScan<span class="logo-ai">AI</span></span>
         </div>
-        <p class="footer-tagline">حوّل جداولك إلى Excel<br>بقوة الذكاء الاصطناعي</p>
-        <div class="footer-badges">
-          <span class="fbadge">🔒 خصوصية 100%</span>
-          <span class="fbadge">⚡ مجاني</span>
+      </header>
+
+      <div class="workspace__body">
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState" role="img" aria-label="No table loaded">
+          <div class="empty-state__graphic" aria-hidden="true">
+            <div class="empty-state__grid"></div>
+          </div>
+          <p class="empty-state__title">No table loaded</p>
+          <p class="empty-state__sub">Upload a grade sheet image and click Generate Table</p>
+          <div class="empty-state__steps" aria-label="Steps to generate table">
+            <div class="step"><span class="step__num">1</span><span class="step__text">Upload image</span></div>
+            <div class="step__arrow" aria-hidden="true">→</div>
+            <div class="step"><span class="step__num">2</span><span class="step__text">Generate</span></div>
+            <div class="step__arrow" aria-hidden="true">→</div>
+            <div class="step"><span class="step__num">3</span><span class="step__text">Edit &amp; Export</span></div>
+          </div>
         </div>
+
+        <!-- Loading state -->
+        <div class="loading-state" id="loadingState" hidden aria-live="assertive" aria-busy="true">
+          <div class="loading-state__visual" aria-hidden="true">
+            <div class="scan-animation">
+              <div class="scan-animation__lines">
+                <div class="scan-line" style="--delay:0s"></div>
+                <div class="scan-line" style="--delay:0.1s"></div>
+                <div class="scan-line" style="--delay:0.2s"></div>
+                <div class="scan-line" style="--delay:0.3s"></div>
+                <div class="scan-line" style="--delay:0.4s"></div>
+              </div>
+              <div class="scan-animation__beam"></div>
+            </div>
+          </div>
+          <p class="loading-state__label">Analyzing image…</p>
+          <p class="loading-state__sub" id="loadingSubText">Detecting table structure and extracting cell values</p>
+        </div>
+
+        <!-- Table container -->
+        <div class="table-wrapper" id="tableWrapper" hidden role="region" aria-label="Editable grade table">
+          <div class="table-scroll" id="tableScroll">
+            <table class="grade-table" id="gradeTable" aria-label="Grade table — click any cell to edit">
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <div class="table-footer" id="tableFooter" aria-live="polite"></div>
+        </div>
+
       </div>
 
-      <div class="footer-links-col">
-        <h4>المنتج</h4>
-        <a href="#features">المميزات</a>
-        <a href="#how-it-works">كيف يعمل</a>
-        <a href="#app">ابدأ الآن</a>
-      </div>
+    </main>
 
-      <div class="footer-links-col">
-        <h4>الدعم</h4>
-        <a href="#faq">الأسئلة الشائعة</a>
-        <a href="mailto:support@tablescan.ai">تواصل معنا</a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2026 TableScan AI. جميع الحقوق محفوظة.</p>
-      <div class="footer-bottom-badges">
-        <span>مفتوح المصدر</span>
-        <span>بيانات آمنة</span>
-        <span>بدون إعلانات</span>
-      </div>
-    </div>
   </div>
-</footer>
 
-<script src="main.js"></script>
+  <!-- Toast notification -->
+  <div class="toast-container" id="toastContainer" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer" role="contentinfo">
+    <span class="app-footer__brand">Pixel2Excel</span>
+    <span class="app-footer__sep" aria-hidden="true">·</span>
+    <span class="app-footer__copy">Grade Table Converter</span>
+    <span class="app-footer__sep" aria-hidden="true">·</span>
+    <span class="app-footer__note">No data is stored or transmitted beyond your session</span>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
+

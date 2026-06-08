@@ -1,28 +1,32 @@
 {
-  "name": "itx",
-  "version": "1.0.0",
+  "name": "p2x",
+  "version": "0.1.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server.js",
   "scripts": {
-  "dev": "nodemon --watch src --exec ts-node src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "krnl0xsns1nk",
+  "type":"module",
   "license": "ISC",
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
+    "@google/genai": "^2.8.0",
+    "@prisma/client": "^7.8.0",
     "body-parser": "^2.2.2",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1"
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.1.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.9.2",
     "nodemon": "^3.1.14",
+    "prisma": "^7.8.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

@@ -5,3 +5,6 @@ dist/
 .env
 .cache
 .env.local
+tmp
+uploads
+/src/generated/prisma
