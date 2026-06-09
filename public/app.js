@@ -92,7 +92,7 @@ removeImageBtn.addEventListener('click', e => {
 });
 
 function handleFile(file) {
-  const MAX_MB = 10;
+  const MAX_MB = 7;
   if (file.size > MAX_MB * 1024 * 1024) {
     showToast(`File too large. Maximum size is ${MAX_MB}MB.`, 'error');
     return;
@@ -151,12 +151,14 @@ async function runGenerate() {
     });
     if (!response.ok) {
       let errMsg = `Server error ${response.status}`;
-      try { const e = await response.json(); errMsg = e.error || errMsg; } catch {}
+      try { const e = await response.json(); errMsg = `${response.status}: ${e.message}` || errMsg; } catch {}
       throw new Error(errMsg);
     }
 
     const data = await response.json();
     const table = parseTableResponse(data);
+	alert(JSON.stringify(response, null, 2));
+	alert(JSON.stringify(table, null, 2));
 
     if (!table || table.length === 0) {
       throw new Error('No table data returned from server.');

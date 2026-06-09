@@ -1,7 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
-// import routes from "./routes/route.js";
+import safeParseJson from "./utils/jsonParse.js";
+import cleanGrades from "./utils/cleaner.js";
 import fs from "fs/promises";
 
 import multer from "multer";
@@ -16,7 +17,7 @@ const upload = multer({
 	  dest: "uploads/"
 });
 
-const fakeMode = process.env.FAKEMODE || false;
+const fakeMode = process.env.FAKEMODE === "true";
 const app = express();
 app.use(express.static(path.join(process.cwd(), "public/")));
 const PORT = process.env.PORT || 3000;
@@ -26,23 +27,29 @@ const PORT = process.env.PORT || 3000;
   res.sendFile(path.join(process.cwd(), "public/index.html"));
 });
 
-/* app.get("/", (req, res) => {
-	res.status(200).json({name: "heheh"})
-})*/
-app.post(
-  "/generate",
-  upload.single("image"),
-  async (req, res) => {
-	  console.log("a requiest")
-	  if (!req.file) {
-  return res.status(400).json({
-    error: "No file uploaded"
-  });
-}
-console.log(req.file);
+
+// gemeni post 
+app.post("/generate", upload.single("image"), async (req, res) => {
+  console.log("a request");
+
+  try {
+    if (!req.file) {
+	const err = "No file uploaded";
+      return res.status(400).json({ error: err, message: err  });
+    }
+
+    if (req.file.size > 7340032) {
+	const err = "Large file";
+      return res.status(413).json({ error: err, message: err });
+    }
+
     const imageBuffer = await fs.readFile(req.file.path);
 
-	if (fakeMode) return res.status(200).json({data : [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]]});
+    if (fakeMode) {
+      return res.status(200).json({
+        data: [[1,2,3],[4,5,6]]
+      });
+    }
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -58,27 +65,36 @@ console.log(req.file);
         },
       ],
     });
-	  console.log(response.text)
-function extractJson(text) {
-  const start = text.indexOf('[');
-  const end = text.lastIndexOf(']');
 
-  if (start === -1 || end === -1) {
-    throw new Error('No JSON array found');
-  }
+    const parsed = safeParseJson(response.text);
+	const data = cleanGrades(parsed)
 
-  return text.slice(start, end + 1);
+    return res.status(200).json({ data });
+
+  } catch (error) {
+    const status = error?.status || error?.code;
+
+    console.error("AI ERROR:", error);
+ 
+ return res.status(429).json({
+    error: "RATE_LIMIT",
+    message: "You’ve made too many requests. Please wait a moment and try again."
+  });
 }
-	const extractedJson = extractJson(response.text)
-	const data = JSON.parse(extractedJson);
-    res.status(200).json({
-      data
-    });
 
-  }
-);	
-// app.use("/", routes);
+if (status === 503) {
+  return res.status(503).json({
+    error: "AI_UNAVAILABLE",
+    message: "AI service is temporarily unavailable. We’ll be back in a moment."
+  });
+}
 
+return res.status(500).json({
+  error: "INTERNAL_ERROR",
+  message: "Something went wrong. Our team has been notified. Please try again later."
+});
+
+});
 
 
 
