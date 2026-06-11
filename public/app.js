@@ -157,8 +157,6 @@ async function runGenerate() {
 
     const data = await response.json();
     const table = parseTableResponse(data);
-	alert(JSON.stringify(response, null, 2));
-	alert(JSON.stringify(table, null, 2));
 
     if (!table || table.length === 0) {
       throw new Error('No table data returned from server.');

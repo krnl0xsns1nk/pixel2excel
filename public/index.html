@@ -43,6 +43,10 @@
       </header>
 
       <section class="sidebar__section" aria-labelledby="upload-heading">
+	<p style="font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 10px; color: var(--ink-4)">
+	Convert grade table images into editable spreadsheets in seconds.
+	Designed for <strong>Moroccan and French grading systems 20/20</strong>
+	</p>
         <h2 class="sidebar__section-label" id="upload-heading">Input Image</h2>
 
         <label
@@ -59,8 +63,9 @@
               <rect x="2" y="2" width="20" height="20" rx="2"/>
             </svg>
           </div>
-          <p class="upload-zone__primary">Drop image here</p>
-          <p class="upload-zone__secondary" id="upload-hint">PNG, JPG, WEBP — max 10MB</p>
+	  <p class="upload-zone__primary">Drop image here<br/>
+	  <span style="color: var(--ink-4); font-size: 0.7rem;" >Just grades table, cut names or extra info before uploading</span></p>
+          <p class="upload-zone__secondary" id="upload-hint">PNG, JPG, WEBP — max 7MB</p>
         </label>
         <input
           type="file"
