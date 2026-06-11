@@ -4,7 +4,7 @@
 
 **Live:** [pixel2excel.onrender.com](https://pixel2excel.onrender.com) · *Server may take ~50s to wake up on first visit*
 
-![Pixel2Excel Screenshot](assest/screenshot.png)
+![Pixel2Excel Screenshot](assets/screenshot.png)
 
 ---
 
