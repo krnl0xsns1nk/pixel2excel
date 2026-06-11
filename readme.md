@@ -1,155 +1,130 @@
-
 # Pixel2Excel
 
-Convert images of school grade tables into clean, structured data using AI.
+> Convert images of school grade tables into clean, structured data — powered by AI.
 
----
-# Link 
-[Pixel2Excel.onrender.com](https://pixel2excel.onrender.com)
-###### Usually the server needs a 50s to wake up 
----
+**Live:** [pixel2excel.onrender.com](https://pixel2excel.onrender.com) · *Server may take ~50s to wake up on first visit*
 
-### Screenshot 
-![Pixel2Excel](assest/screenshot.png)
----
-
-## Why this exists
-
-In Moroccan and French-style education systems, teachers often manage large grade tables that must be manually transferred into Excel or similar tools.
-
-This process is repetitive, time-consuming, and error-prone.
-
-Pixel2Excel was built to reduce that manual work by automatically extracting grade tables from images and converting them into clean, structured data.
+![Pixel2Excel Screenshot](assest/screenshot.png)
 
 ---
 
-## Important Scope
+## Best practices & how to get good results
 
-This project is specifically designed for grading systems where values are between **0 and 20**.
+Following these tips will significantly improve extraction accuracy.
 
-All extracted values are automatically normalized to this range, as it matches Moroccan/French academic grading standards.
+**What to upload**
+- Upload images that contain **only the grade table** — nothing else
+- Crop out student names, headers, stamps, signatures, or any surrounding text before uploading
+- Extra information outside the table confuses the AI and reduces accuracy
+
+**If you are filling a table by hand**
+- Write **inside the cells only** — do not write outside cell boundaries or across borders
+- Use **clear, separated digits** — robotic or printed-style handwriting works best
+- Avoid cursive or stylized number styles (e.g. crossed 7s, looped 9s)
+- Digital-style numbers (like on a calculator display) give the most reliable results
+
+**Errors you might encounter**
+- `429` or `503` errors mean the AI service is under high demand — this is not a bug
+- Simply wait a few minutes and try again, the service will recover on its own
+- Do not refresh repeatedly, it will not help
+
+**Found a bug or have an idea?**
+- Please open a [GitHub issue](https://github.com/your-username/pixel2excel/issues) — every report helps improve the tool for everyone
+- If something went wrong or you have a suggestion, do not hesitate to reach out to the developer directly
 
 ---
 
-## What it does
+## What is this?
 
-- Upload an image of a grade table
-- Extract structured data using AI (Gemini API)
-- Clean and normalize OCR/AI errors
-- Convert results into a usable 2D array
-- Ensure all grades stay within 0–20 range
+In Moroccan and French-style education systems, teachers manage large grade tables that must be manually transferred into Excel. The process is repetitive, error-prone, and slow.
+
+Pixel2Excel eliminates that manual work. Upload an image of any grade table — printed or handwritten — and get back clean, structured data ready for export.
 
 ---
 
-## Example
+## Live Demo
 
-### Input
-Image of a handwritten or printed grade table
+| Step | Description |
+|------|-------------|
+| 1 | Upload a photo or scan of a grade table |
+| 2 | AI extracts the table structure and values |
+| 3 | Values are cleaned and normalized to 0–20 |
+| 4 | Edit cells directly, then export as CSV or XLSX |
 
-### Output
-```json
-[
-  [18, 12, 15, 17],
-  [14, 10, 16, 13],
-  [19, 18, 17, 15]
-]
+---
+
+## Features
+
+- **AI-powered extraction** — Gemini API reads grade tables from any image
+- **Robust JSON parsing** — handles messy, incomplete, or multi-block AI responses
+- **OCR correction** — automatically fixes common misread patterns (e.g. `0.9 → 9`, `41 → 4.1`)
+- **Grade normalization** — strict 0–20 validation matching Moroccan/French academic standards
+- **In-browser editing** — click any cell to edit, with undo/redo support
+- **Export** — download as CSV or XLSX with no external dependencies
+- **Automated tests** — parser and cleaner are covered by a Node.js test suite
+
+---
+
+## How it works
+
+```
+Image upload
+    ↓
+Gemini API  ──→  raw AI response (messy text + JSON)
+    ↓
+safeParseJson()  ──→  extracts largest valid 2D array
+    ↓
+cleanGrades()  ──→  normalizes OCR errors, validates range
+    ↓
+Structured 2D array  ──→  rendered as editable table
+    ↓
+Export (CSV / XLSX)
 ```
 
----
+### Grade normalization rules
 
-Features
-
-AI-powered extraction from images
-
-Robust JSON parsing (handles messy AI responses)
-
-Grade normalization rules (OCR correction)
-
-Strict validation (0–20 system only)
-
-Automated tests for reliability
-
-Error handling for API failures (429, invalid responses, etc.)
-
-
+| Pattern | Example | Result |
+|---------|---------|--------|
+| `0.X` | `0.9` | `9` |
+| `1.X` (X ≠ 25, 5, 50, 75) | `1.3` | `13` |
+| Whole number > 20 | `41` | `4.1` |
+| Out of range | `999`, `-5` | `null` |
 
 ---
 
-How it works
+## Tech stack
 
-1. User uploads an image
-
-
-2. Backend sends image to Gemini API
-
-
-3. AI returns raw, messy response
-
-
-4. Parser extracts the most relevant table
-
-
-5. Cleaner function normalizes values
-
-
-6. Final structured data is returned
-
-
-
+| Layer | Technology |
+|-------|-----------|
+| Runtime | Node.js |
+| Server | Express |
+| AI | Gemini 2.5 Flash API |
+| File upload | Multer |
+| Frontend | Vanilla JS, CSS, HTML |
+| Testing | Node.js built-in test runner |
 
 ---
 
-### Tech Stack
+## Limitations
 
-Node.js
-
-Express
-
-Gemini API
-
-Multer
-
-Node test runner
-
-
+- AI accuracy depends on image quality — blurry or low-contrast images may produce errors
+- Results should always be reviewed before official use
+- Designed specifically for 0–20 grading systems
 
 ---
 
-### Limitations
+## Version history
 
-AI may misread unclear images
+### v1.0.0
+- Public release
 
-Results should always be reviewed before official use
-
-Works best with structured grade tables
-
-
-
----
-
-## Future improvements
-
-- Increase extraction accuracy (especially unclear tables)
-- Improve robustness of parsing logic
-- Handle API rate limits more intelligently (429 protection)
-- Optimize performance under repeated requests
+### v0.1.1 — Reliability Update
+- Improved JSON parsing for messy AI responses
+- Added grade normalization and OCR correction
+- Automated test suite
+- Better API error handling
 
 ---
 
-#### Version
+*Built for teachers. Made with care.*
 
-v0.1.1 — Reliability Update
-
-Improved parsing system
-
-Added grade normalization rules
-
-Added automated testing
-
-Better API error handling
-
-
----
-##### Status
-
-Stable core pipeline. Actively improving.

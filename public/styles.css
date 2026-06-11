@@ -1140,7 +1140,6 @@ input, textarea {
   font-family: var(--font-display);
   font-size: 10px;
   font-weight: 700;
-  color: var(--ink-6);
   letter-spacing: 0.2px;
 }
 
