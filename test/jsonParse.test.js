@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert";
-import { safeParseJson } from "../src/utils/jsonParse.js";
+import safeParseJson from "../src/utils/jsonParse.js";
 
 test("parses clean JSON array", () => {
   const input = `

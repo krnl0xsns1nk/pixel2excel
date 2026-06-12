@@ -11,22 +11,16 @@
   "keywords": [],
   "author": "krnl0xsns1nk",
   "type": "module",
-  "license": "ISC",
+  "license": "",
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@google/genai": "^2.8.0",
-    "@prisma/client": "^7.8.0",
     "body-parser": "^2.2.2",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "multer": "^2.1.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.9.2",
-    "nodemon": "^3.1.14",
-    "prisma": "^7.8.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "nodemon": "^3.1.14"
   }
 }
