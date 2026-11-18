@@ -76,11 +76,13 @@ app.post("/generate", upload.single("image"), async (req, res) => {
 
     console.error("AI ERROR:", error);
  
- return res.status(429).json({
+
+  if (status === 429) {
+    return res.status(429).json({
     error: "RATE_LIMIT",
     message: "You’ve made too many requests. Please wait a moment and try again."
   });
-}
+  }
 
 if (status === 503) {
   return res.status(503).json({
@@ -93,7 +95,7 @@ return res.status(500).json({
   error: "INTERNAL_ERROR",
   message: "Something went wrong. Our team has been notified. Please try again later."
 });
-
+}
 });
 
 
