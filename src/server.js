@@ -95,7 +95,16 @@ return res.status(500).json({
   error: "INTERNAL_ERROR",
   message: "Something went wrong. Our team has been notified. Please try again later."
 });
+} finally {
+  if (req.file) {
+    await fs.unlink(req.file.path).catch((err) => {
+      console.error("Failed to delete uploaded file:", err);
+    });
+  }
 }
+
+
+
 });
 
 
